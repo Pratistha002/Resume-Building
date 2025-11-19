@@ -1,6 +1,8 @@
 package com.saarthix.controller;
 
 import com.saarthix.model.blueprint.Blueprint;
+import com.saarthix.model.SectionTemplate;
+import com.saarthix.repository.SectionTemplateRepository;
 import com.saarthix.service.AdminService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +16,11 @@ import java.util.List;
 public class AdminController {
 
     private final AdminService adminService;
+    private final SectionTemplateRepository sectionTemplateRepository;
 
-    public AdminController(AdminService adminService) {
+    public AdminController(AdminService adminService, SectionTemplateRepository sectionTemplateRepository) {
         this.adminService = adminService;
+        this.sectionTemplateRepository = sectionTemplateRepository;
     }
 
     @GetMapping("/blueprints")
@@ -73,5 +77,54 @@ public class AdminController {
     @GetMapping("/blueprints/type/{type}")
     public List<Blueprint> getBlueprintsByType(@PathVariable String type) {
         return adminService.getBlueprintsByType(type);
+    }
+
+    // Section Template endpoints
+    @GetMapping("/section-templates")
+    public List<SectionTemplate> getAllSectionTemplates() {
+        return sectionTemplateRepository.findAll();
+    }
+
+    @GetMapping("/section-templates/active")
+    public List<SectionTemplate> getActiveSectionTemplates() {
+        return sectionTemplateRepository.findByIsActiveTrue();
+    }
+
+    @GetMapping("/section-templates/{id}")
+    public ResponseEntity<SectionTemplate> getSectionTemplateById(@PathVariable String id) {
+        return sectionTemplateRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/section-templates")
+    public ResponseEntity<SectionTemplate> createSectionTemplate(@RequestBody SectionTemplate sectionTemplate) {
+        try {
+            SectionTemplate created = sectionTemplateRepository.save(sectionTemplate);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @PutMapping("/section-templates/{id}")
+    public ResponseEntity<SectionTemplate> updateSectionTemplate(@PathVariable String id, @RequestBody SectionTemplate sectionTemplate) {
+        try {
+            sectionTemplate.setId(id);
+            SectionTemplate updated = sectionTemplateRepository.save(sectionTemplate);
+            return ResponseEntity.ok(updated);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+    }
+
+    @DeleteMapping("/section-templates/{id}")
+    public ResponseEntity<Void> deleteSectionTemplate(@PathVariable String id) {
+        try {
+            sectionTemplateRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

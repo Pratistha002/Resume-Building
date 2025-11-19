@@ -2,10 +2,11 @@ package com.saarthix.controller;
 
 import com.saarthix.model.SkillTest;
 import com.saarthix.service.SkillTestService;
+import com.saarthix.service.RolePreparationService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/skill-test")
@@ -13,99 +14,62 @@ import java.util.Map;
 public class SkillTestController {
 
     private final SkillTestService skillTestService;
+    private final RolePreparationService rolePreparationService;
 
-    public SkillTestController(SkillTestService skillTestService) {
+    public SkillTestController(
+            SkillTestService skillTestService,
+            RolePreparationService rolePreparationService) {
         this.skillTestService = skillTestService;
+        this.rolePreparationService = rolePreparationService;
     }
 
-    @PostMapping("/start")
-    public ResponseEntity<?> startTest(
+    @GetMapping("/{roleName}/{skillName}")
+    public ResponseEntity<SkillTest> getTest(
+            @PathVariable String roleName,
+            @PathVariable String skillName,
+            @RequestParam String studentId) {
+        try {
+            SkillTest test = skillTestService.getOrCreateTest(roleName, skillName, studentId);
+            return ResponseEntity.ok(test);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/{roleName}/{skillName}/start")
+    public ResponseEntity<SkillTest> startTest(
+            @PathVariable String roleName,
+            @PathVariable String skillName,
+            @RequestParam String studentId) {
+        try {
+            SkillTest test = skillTestService.startTest(roleName, skillName, studentId);
+            return ResponseEntity.ok(test);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @PostMapping("/{roleName}/{skillName}/submit")
+    public ResponseEntity<SkillTest> submitTest(
+            @PathVariable String roleName,
+            @PathVariable String skillName,
             @RequestParam String studentId,
-            @RequestParam String roleName,
-            @RequestParam String skillName) {
+            @RequestBody List<SkillTest.Question> answeredQuestions) {
         try {
-            String decodedRoleName = java.net.URLDecoder.decode(roleName, "UTF-8");
-            String decodedSkillName = java.net.URLDecoder.decode(skillName, "UTF-8");
+            SkillTest test = skillTestService.submitTest(roleName, skillName, studentId, answeredQuestions);
             
-            SkillTest test = skillTestService.startTest(studentId, decodedRoleName, decodedSkillName);
-            return ResponseEntity.ok(test);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error starting test: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/{testId}")
-    public ResponseEntity<?> getTest(@PathVariable String testId) {
-        try {
-            SkillTest test = skillTestService.getTest(testId);
-            return ResponseEntity.ok(test);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error fetching test: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/in-progress")
-    public ResponseEntity<?> getInProgressTest(
-            @RequestParam String studentId,
-            @RequestParam String roleName,
-            @RequestParam String skillName) {
-        try {
-            String decodedRoleName = java.net.URLDecoder.decode(roleName, "UTF-8");
-            String decodedSkillName = java.net.URLDecoder.decode(skillName, "UTF-8");
-            
-            SkillTest test = skillTestService.getInProgressTest(studentId, decodedRoleName, decodedSkillName);
-            return ResponseEntity.ok(test);
-        } catch (Exception e) {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping("/{testId}/answer")
-    public ResponseEntity<?> submitAnswer(
-            @PathVariable String testId,
-            @RequestBody Map<String, Object> request) {
-        try {
-            Integer questionNumber = (Integer) request.get("questionNumber");
-            String answer = (String) request.get("answer");
-            
-            SkillTest test = skillTestService.submitAnswer(testId, questionNumber, answer);
-            return ResponseEntity.ok(test);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error submitting answer: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/{testId}/submit")
-    public ResponseEntity<?> submitTest(@PathVariable String testId) {
-        try {
-            SkillTest test = skillTestService.submitTest(testId);
-            return ResponseEntity.ok(test);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error submitting test: " + e.getMessage());
-        }
-    }
-
-    @GetMapping("/result")
-    public ResponseEntity<?> getLatestResult(
-            @RequestParam String studentId,
-            @RequestParam String roleName,
-            @RequestParam String skillName) {
-        try {
-            String decodedRoleName = java.net.URLDecoder.decode(roleName, "UTF-8");
-            String decodedSkillName = java.net.URLDecoder.decode(skillName, "UTF-8");
-            
-            SkillTest test = skillTestService.getLatestTestResult(studentId, decodedRoleName, decodedSkillName);
-            if (test == null) {
-                return ResponseEntity.notFound().build();
+            // Update role preparation with test completion
+            if (test.getScore() != null && test.getTotalQuestions() != null) {
+                int percentage = (test.getScore() * 100) / test.getTotalQuestions();
+                // Mark skill as completed if score is >= 70%
+                if (percentage >= 70) {
+                    rolePreparationService.completeSkillTest(roleName, skillName, studentId, test.getScore());
+                }
             }
+            
             return ResponseEntity.ok(test);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error fetching result: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 }

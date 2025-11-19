@@ -19,28 +19,9 @@ import JobDescription from "./pages/students/JobDescription";
 import PreparationAnalytics from "./pages/students/PreparationAnalytics";
 import SkillTest from "./pages/students/SkillTest";
 import ResumeBuilder from "./pages/students/ResumeBuilder";
-import CareerCounselling from "./pages/students/CareerCounselling";
-import ApplyJobs from "./pages/students/ApplyJobs";
-import Courses from "./pages/students/Courses";
-import RoleReadyTraining from "./pages/students/RoleReadyTraining";
-import InternshipManagement from "./pages/institutes/InternshipManagement";
-import ExpertSessions from "./pages/institutes/ExpertSessions";
-import ExpertDetails from "./pages/institutes/ExpertDetails";
-import ExpertEnrollment from "./pages/institutes/ExpertEnrollment";
-import IndustryExpertSessions from "./pages/industry/ExpertSessions";
-import IndustryExpertDetails from "./pages/industry/ExpertDetails";
-import IndustryExpertEnrollment from "./pages/industry/ExpertEnrollment";
-import Workshops from "./pages/institutes/Workshops";
-import StudentTrainingRoleReady from "./pages/institutes/StudentTrainingRoleReady";
 import ResumeAccess from "./pages/industry/ResumeAccess";
-import PostJobs from "./pages/industry/PostJobs";
-import RoleReadyFreshers from "./pages/industry/RoleReadyFreshers";
-import RoleReadyFreshersRequest from "./pages/industry/RoleReadyFreshersRequest";
-import AiInterview from "./pages/industry/AiInterview";
 import AdminDashboard from "./pages/AdminDashboard";
 import ResumeReview from "./pages/admin/ResumeReview";
-import IndustryTrainingRequests from "./pages/admin/IndustryTrainingRequests";
-import ExpertManagement from "./pages/admin/ExpertManagement";
 
 function App() {
   return (
@@ -131,98 +112,11 @@ function App() {
               <ResumeBuilder />
             </ProtectedRoute>
           } />
-          <Route path="/students/career-counselling" element={
-            <ProtectedRoute requiredUserType="STUDENT">
-              <CareerCounselling />
-            </ProtectedRoute>
-          } />
-          <Route path="/students/apply-jobs" element={
-            <ProtectedRoute requiredUserType="STUDENT">
-              <ApplyJobs />
-            </ProtectedRoute>
-          } />
-          <Route path="/students/courses" element={
-            <ProtectedRoute requiredUserType="STUDENT">
-              <Courses />
-            </ProtectedRoute>
-          } />
-          <Route path="/students/role-ready-training" element={
-            <ProtectedRoute requiredUserType="STUDENT">
-              <RoleReadyTraining />
-            </ProtectedRoute>
-          } />
-          
-          {/* Institutes */}
-          <Route path="/institutes/internship-management" element={
-            <ProtectedRoute requiredUserType="INSTITUTE">
-              <InternshipManagement />
-            </ProtectedRoute>
-          } />
-          <Route path="/institutes/expert-sessions" element={
-            <ProtectedRoute requiredUserType="INSTITUTE">
-              <ExpertSessions />
-            </ProtectedRoute>
-          } />
-          <Route path="/institutes/expert-sessions/:expertId" element={
-            <ProtectedRoute requiredUserType="INSTITUTE">
-              <ExpertDetails />
-            </ProtectedRoute>
-          } />
-          <Route path="/institutes/expert-sessions/:expertId/enroll" element={
-            <ProtectedRoute requiredUserType="INSTITUTE">
-              <ExpertEnrollment />
-            </ProtectedRoute>
-          } />
-          <Route path="/institutes/workshops" element={
-            <ProtectedRoute requiredUserType="INSTITUTE">
-              <Workshops />
-            </ProtectedRoute>
-          } />
-          <Route path="/institutes/student-training-role-ready" element={
-            <ProtectedRoute requiredUserType="INSTITUTE">
-              <StudentTrainingRoleReady />
-            </ProtectedRoute>
-          } />
           
           {/* Industry */}
           <Route path="/industry/resume-access" element={
             <ProtectedRoute requiredUserType="INDUSTRY">
               <ResumeAccess />
-            </ProtectedRoute>
-          } />
-          <Route path="/industry/post-jobs" element={
-            <ProtectedRoute requiredUserType="INDUSTRY">
-              <PostJobs />
-            </ProtectedRoute>
-          } />
-          <Route path="/industry/role-ready-freshers" element={
-            <ProtectedRoute requiredUserType="INDUSTRY">
-              <RoleReadyFreshers />
-            </ProtectedRoute>
-          } />
-          <Route path="/industry/role-ready-freshers/request" element={
-            <ProtectedRoute requiredUserType="INDUSTRY">
-              <RoleReadyFreshersRequest />
-            </ProtectedRoute>
-          } />
-          <Route path="/industry/ai-interview" element={
-            <ProtectedRoute requiredUserType="INDUSTRY">
-              <AiInterview />
-            </ProtectedRoute>
-          } />
-          <Route path="/industry/expert-sessions" element={
-            <ProtectedRoute requiredUserType="INDUSTRY">
-              <IndustryExpertSessions />
-            </ProtectedRoute>
-          } />
-          <Route path="/industry/expert-sessions/:expertId" element={
-            <ProtectedRoute requiredUserType="INDUSTRY">
-              <IndustryExpertDetails />
-            </ProtectedRoute>
-          } />
-          <Route path="/industry/expert-sessions/:expertId/enroll" element={
-            <ProtectedRoute requiredUserType="INDUSTRY">
-              <IndustryExpertEnrollment />
             </ProtectedRoute>
           } />
           
@@ -235,16 +129,6 @@ function App() {
           <Route path="/admin/resume-review" element={
             <ProtectedRoute requiredRole="ADMIN">
               <ResumeReview />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/industry-training" element={
-            <ProtectedRoute requiredRole="ADMIN">
-              <IndustryTrainingRequests />
-            </ProtectedRoute>
-          } />
-          <Route path="/admin/expert-management" element={
-            <ProtectedRoute requiredRole="ADMIN">
-              <ExpertManagement />
             </ProtectedRoute>
           } />
         </Routes>

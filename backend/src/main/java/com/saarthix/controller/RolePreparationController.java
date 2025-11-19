@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/api/role-preparation")
@@ -19,109 +18,60 @@ public class RolePreparationController {
         this.rolePreparationService = rolePreparationService;
     }
 
-    @PostMapping("/start/{roleName}")
-    public ResponseEntity<?> startPreparation(
-            @PathVariable String roleName,
-            @RequestParam String studentId) {
-        try {
-            // URL decode the role name (handle already decoded names)
-            String decodedRoleName;
-            try {
-                decodedRoleName = java.net.URLDecoder.decode(roleName, "UTF-8");
-            } catch (Exception decodeEx) {
-                decodedRoleName = roleName; // Use as-is if decoding fails
-            }
-            
-            System.out.println("Starting preparation for role: " + decodedRoleName + ", student: " + studentId);
-            RolePreparation preparation = rolePreparationService.startPreparation(studentId, decodedRoleName);
-            System.out.println("Preparation created/retrieved: " + (preparation != null ? preparation.getId() : "null"));
-            return ResponseEntity.ok(preparation);
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println("Error in startPreparation: " + e.getMessage());
-            return ResponseEntity.badRequest().body("Error starting preparation: " + e.getMessage());
-        }
-    }
-
-    @PutMapping("/skill/{roleName}/{skillName}")
-    public ResponseEntity<?> updateSkillCompletion(
-            @PathVariable String roleName,
-            @PathVariable String skillName,
-            @RequestParam String studentId,
-            @RequestParam boolean completed) {
-        try {
-            // URL decode the role name and skill name
-            String decodedRoleName = java.net.URLDecoder.decode(roleName, "UTF-8");
-            String decodedSkillName = java.net.URLDecoder.decode(skillName, "UTF-8");
-            RolePreparation preparation = rolePreparationService.updateSkillCompletion(
-                    studentId, decodedRoleName, decodedSkillName, completed);
-            return ResponseEntity.ok(preparation);
-        } catch (RuntimeException e) {
-            e.printStackTrace();
-            // Return a structured error response
-            Map<String, String> errorResponse = new java.util.HashMap<>();
-            errorResponse.put("error", e.getMessage());
-            errorResponse.put("code", "SKILL_COMPLETION_REQUIRES_TEST");
-            return ResponseEntity.badRequest().body(errorResponse);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Map<String, String> errorResponse = new java.util.HashMap<>();
-            errorResponse.put("error", "Error updating skill: " + e.getMessage());
-            return ResponseEntity.badRequest().body(errorResponse);
-        }
-    }
-
     @GetMapping("/{roleName}")
     public ResponseEntity<RolePreparation> getPreparation(
             @PathVariable String roleName,
             @RequestParam String studentId) {
+        RolePreparation preparation = rolePreparationService.getPreparation(roleName, studentId);
+        if (preparation != null) {
+            return ResponseEntity.ok(preparation);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/all")
+    public List<RolePreparation> getAllPreparations(@RequestParam String studentId) {
+        return rolePreparationService.getAllPreparations(studentId);
+    }
+
+    @PostMapping("/start/{roleName}")
+    public ResponseEntity<RolePreparation> startPreparation(
+            @PathVariable String roleName,
+            @RequestParam String studentId,
+            @RequestParam(required = false) Integer duration) {
         try {
-            // URL decode the role name
-            String decodedRoleName = java.net.URLDecoder.decode(roleName, "UTF-8");
-            RolePreparation preparation = rolePreparationService.getPreparation(studentId, decodedRoleName);
-            if (preparation != null) {
-                return ResponseEntity.ok(preparation);
-            }
-            return ResponseEntity.notFound().build();
+            RolePreparation preparation = rolePreparationService.startPreparation(roleName, studentId, duration);
+            return ResponseEntity.ok(preparation);
         } catch (Exception e) {
-            e.printStackTrace();
             return ResponseEntity.badRequest().build();
         }
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<RolePreparation>> getAllPreparations(@RequestParam String studentId) {
-        List<RolePreparation> preparations = rolePreparationService.getAllPreparations(studentId);
-        return ResponseEntity.ok(preparations);
-    }
-
-    @GetMapping("/analytics/{roleName}")
-    public ResponseEntity<?> getAnalytics(
+    @PutMapping("/skill/{roleName}/{skillName}")
+    public ResponseEntity<RolePreparation> updateSkillStatus(
             @PathVariable String roleName,
-            @RequestParam String studentId) {
+            @PathVariable String skillName,
+            @RequestParam String studentId,
+            @RequestParam Boolean completed) {
         try {
-            // URL decode the role name
-            String decodedRoleName = java.net.URLDecoder.decode(roleName, "UTF-8");
-            Map<String, Object> analytics = rolePreparationService.getAnalytics(studentId, decodedRoleName);
-            return ResponseEntity.ok(analytics);
+            RolePreparation preparation = rolePreparationService.updateSkillStatus(roleName, skillName, studentId, completed);
+            return ResponseEntity.ok(preparation);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error fetching analytics: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 
-    @DeleteMapping("/{roleName}")
-    public ResponseEntity<?> deletePreparation(
+    @PostMapping("/skill/{roleName}/{skillName}/test")
+    public ResponseEntity<RolePreparation> completeSkillTest(
             @PathVariable String roleName,
-            @RequestParam String studentId) {
+            @PathVariable String skillName,
+            @RequestParam String studentId,
+            @RequestParam Integer score) {
         try {
-            // URL decode the role name
-            String decodedRoleName = java.net.URLDecoder.decode(roleName, "UTF-8");
-            rolePreparationService.deletePreparation(studentId, decodedRoleName);
-            return ResponseEntity.ok().body("Preparation deleted successfully");
+            RolePreparation preparation = rolePreparationService.completeSkillTest(roleName, skillName, studentId, score);
+            return ResponseEntity.ok(preparation);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error deleting preparation: " + e.getMessage());
+            return ResponseEntity.badRequest().build();
         }
     }
 }

@@ -9,11 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface SkillTestRepository extends MongoRepository<SkillTest, String> {
-    Optional<SkillTest> findByStudentIdAndRoleNameAndSkillNameAndStatus(
-            String studentId, String roleName, String skillName, String status);
-    List<SkillTest> findByStudentIdAndRoleNameAndSkillName(
-            String studentId, String roleName, String skillName);
-    Optional<SkillTest> findFirstByStudentIdAndRoleNameAndSkillNameOrderByStartedAtDesc(
-            String studentId, String roleName, String skillName);
+    Optional<SkillTest> findByStudentIdAndRoleNameAndSkillName(String studentId, String roleName, String skillName);
+    List<SkillTest> findByStudentId(String studentId);
+    List<SkillTest> findByStudentIdAndRoleName(String studentId, String roleName);
 }
 

@@ -16,8 +16,14 @@ const GoogleAuth = () => {
 
     script.onload = () => {
       if (window.google) {
+        const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+        if (!clientId) {
+          console.error('Google Client ID not configured. Please set VITE_GOOGLE_CLIENT_ID in .env file');
+          return;
+        }
+        
         window.google.accounts.id.initialize({
-          client_id: '870210312110-3gmop6gud44relrcidkj74i5r8l1boto.apps.googleusercontent.com',
+          client_id: clientId,
           callback: handleCredentialResponse,
           auto_select: false,
           cancel_on_tap_outside: true

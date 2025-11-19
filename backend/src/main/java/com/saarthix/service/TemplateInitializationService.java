@@ -186,10 +186,20 @@ public class TemplateInitializationService implements CommandLineRunner {
                 SectionTemplate template = new SectionTemplate();
                 template.setTitle(title);
                 template.setContent((String) sectionData.get("content"));
-                template.setContentType("text"); // Default to text type
-                template.setIcon("📄"); // Default icon
-                template.setColor("bg-gray-100 hover:bg-gray-200"); // Default color
-                template.setActive(true);
+                template.setContentType((String) sectionData.get("contentType"));
+                if (template.getContentType() == null) {
+                    template.setContentType("text"); // Default to text type
+                }
+                template.setIcon((String) sectionData.get("icon"));
+                if (template.getIcon() == null) {
+                    template.setIcon("📄"); // Default icon
+                }
+                template.setColor((String) sectionData.get("color"));
+                if (template.getColor() == null) {
+                    template.setColor("bg-gray-100 hover:bg-gray-200"); // Default color
+                }
+                template.setIsActive(sectionData.get("isActive") != null ? 
+                    (Boolean) sectionData.get("isActive") : true);
 
                 sectionTemplateRepository.save(template);
                 System.out.println("Created section template: " + template.getTitle());

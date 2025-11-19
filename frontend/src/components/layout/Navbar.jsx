@@ -21,44 +21,34 @@ const Navbar = () => {
             Dashboard
           </Link>
           
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost">Students</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem asChild><Link to="/students/career-blueprint">Career Blueprint</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/students/resume-builder">Resume Builder</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/students/career-counselling">Career Counselling</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/students/apply-jobs">Apply to Jobs</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/students/courses">Courses</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/students/role-ready-training">Role Ready Training</Link></DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user?.userType === 'STUDENT' && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">Students</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild><Link to="/students/career-blueprint">Career Blueprint</Link></DropdownMenuItem>
+                <DropdownMenuItem asChild><Link to="/students/resume-builder">Resume Builder</Link></DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost">Institutes</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem asChild><Link to="/institutes/internship-management">Internship Management</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/institutes/student-training-role-ready">Student Training (Role Ready)</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/institutes/expert-sessions">Expert Sessions</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/institutes/workshops">Workshops</Link></DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user?.userType === 'INDUSTRY' && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost">Industry</Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem asChild><Link to="/industry/resume-access">Resume Access</Link></DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
           
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="ghost">Industry</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem asChild><Link to="/industry/resume-access">Resume Access</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/industry/role-ready-freshers">Role Ready Freshers</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/industry/post-jobs">Post Jobs & Hackathons</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/industry/ai-interview">AI Technical Interview</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/industry/expert-sessions">Expert Sessions</Link></DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {user?.role === 'ADMIN' && (
+            <Link to="/admin/dashboard" className="text-gray-700 hover:text-blue-600">
+              Admin
+            </Link>
+          )}
           
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

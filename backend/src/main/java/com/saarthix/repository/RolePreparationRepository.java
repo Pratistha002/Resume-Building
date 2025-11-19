@@ -11,7 +11,7 @@ import java.util.Optional;
 public interface RolePreparationRepository extends MongoRepository<RolePreparation, String> {
     Optional<RolePreparation> findByStudentIdAndRoleName(String studentId, String roleName);
     List<RolePreparation> findByStudentId(String studentId);
-    List<RolePreparation> findByStudentIdAndIsActive(String studentId, boolean isActive);
-    boolean existsByStudentIdAndRoleName(String studentId, String roleName);
+    List<RolePreparation> findByStudentIdAndIsActiveTrue(String studentId);
+    List<RolePreparation> findByStudentIdAndActiveTrue(String studentId);
 }
 

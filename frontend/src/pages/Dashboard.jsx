@@ -49,21 +49,6 @@ const Dashboard = () => {
               <p className="text-gray-600">Create professional resumes with templates</p>
             </Link>
             
-            <Link to="/students/apply-jobs" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Apply for Jobs</h3>
-              <p className="text-gray-600">Browse and apply to job opportunities</p>
-            </Link>
-            
-            <Link to="/students/courses" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Courses</h3>
-              <p className="text-gray-600">Enroll in skill development courses</p>
-            </Link>
-            
-            <Link to="/students/career-counselling" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Career Counselling</h3>
-              <p className="text-gray-600">Get guidance from career experts</p>
-            </Link>
-            
             {preparations.length > 0 && (
               <Link 
                 to={`/students/preparation-analytics/${encodeURIComponent(preparations[0].roleName)}`}
@@ -82,57 +67,12 @@ const Dashboard = () => {
           </div>
         );
         
-      case 'INSTITUTE':
-        return (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Link to="/institutes/internship-management" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Internship Management</h3>
-              <p className="text-gray-600">Manage student internships and placements</p>
-            </Link>
-
-            <Link to="/institutes/student-training-role-ready" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Student Training (Role Ready)</h3>
-              <p className="text-gray-600">Enroll batches of students into role-ready programs</p>
-            </Link>
-            
-            <Link to="/institutes/expert-sessions" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Expert Sessions</h3>
-              <p className="text-gray-600">Organize expert talks and workshops</p>
-            </Link>
-            
-            <Link to="/institutes/workshops" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Workshops</h3>
-              <p className="text-gray-600">Conduct skill development workshops</p>
-            </Link>
-          </div>
-        );
-        
       case 'INDUSTRY':
         return (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <Link to="/industry/post-jobs" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Post Jobs</h3>
-              <p className="text-gray-600">Create and manage job postings</p>
-            </Link>
-            
             <Link to="/industry/resume-access" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
               <h3 className="text-xl font-semibold text-gray-900 mb-2">Resume Access</h3>
               <p className="text-gray-600">Browse student resumes and profiles</p>
-            </Link>
-            
-            <Link to="/industry/role-ready-freshers" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Role Ready Freshers</h3>
-              <p className="text-gray-600">Secure day-one ready cohorts or request bespoke programs</p>
-            </Link>
-
-            <Link to="/industry/ai-interview" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">AI Interview</h3>
-              <p className="text-gray-600">Conduct AI-powered interviews</p>
-            </Link>
-
-            <Link to="/industry/expert-sessions" className="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Expert Sessions</h3>
-              <p className="text-gray-600">Book sessions with industry experts</p>
             </Link>
           </div>
         );
@@ -157,7 +97,6 @@ const Dashboard = () => {
             <h1 className="text-3xl font-bold text-gray-900">Welcome back, {user?.name}!</h1>
             <p className="mt-2 text-gray-600">
               {user?.userType === 'STUDENT' && 'Explore your career development tools'}
-              {user?.userType === 'INSTITUTE' && 'Manage your educational programs'}
               {user?.userType === 'INDUSTRY' && 'Connect with talented students'}
               {!user?.userType && 'Complete your profile to get started'}
             </p>

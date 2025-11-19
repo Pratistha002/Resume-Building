@@ -6,33 +6,30 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Map;
 
 @Data
-@Document(collection = "skill_tests")
+@Document(collection = "skillTests")
 public class SkillTest {
-    
     @Id
     private String id;
-    
-    private String studentId;
     private String roleName;
     private String skillName;
-    
+    private String studentId;
     private List<Question> questions;
-    private Map<Integer, String> answers; // questionIndex -> answer
-    private Integer score; // percentage score
-    private Boolean passed; // true if score >= 80
+    private Integer score;
+    private Integer totalQuestions;
     private LocalDateTime startedAt;
     private LocalDateTime completedAt;
-    private String status; // "IN_PROGRESS", "COMPLETED", "FAILED"
-    
+    private String status; // "in_progress", "completed", "not_started"
+
     @Data
     public static class Question {
+        private String questionId;
         private String questionText;
-        private List<String> options; // Multiple choice options
-        private String correctAnswer; // The correct answer
-        private Integer questionNumber;
+        private List<String> options;
+        private String correctAnswer;
+        private String selectedAnswer;
+        private Boolean isCorrect;
     }
 }
 

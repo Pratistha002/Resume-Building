@@ -18,10 +18,16 @@ services:
     env_file:
       - .env
     environment:
-      - JWT_SECRET=default-secret-key-change-in-production
+      - JWT_SECRET=${JWT_SECRET}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ADMIN_USERNAME=${ADMIN_USERNAME}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - MONGODB_URI=${MONGODB_URI}
+      - MONGODB_DATABASE=${MONGODB_DATABASE}
+      - SERVER_PORT=${SERVER_PORT}
+      - FRONTEND_URL=${FRONTEND_URL}
   mongodb:
     image: mongo:6
     ports:
